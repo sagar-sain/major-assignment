@@ -1,0 +1,45 @@
+.form-module input[type="button"] {
+    background:#84C639;
+    width: 100%;
+    border: 0;
+    padding: 10px 15px;
+    color: #ffffff;
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
+    font-size:14px;
+    font-weight:bold;
+}
+.form-module input[type="button"]:hover {
+    background:#FA1818;
+}
+label.error{
+    color: red;
+    font-style: italic;
+}
+
+#messageBox{
+    width: 30%;
+    position: fixed;
+    right: 10px;
+    top: 60px;
+    padding: 5px;
+    background-color: greenyellow;
+    border-radius: 5px;
+    color: black;
+    text-align: center;
+    z-index: 5;
+    border: 2px solid yellow;
+}
+#messageBoxSuccess{
+    width: 30%;
+    position: fixed;
+    right: 10px;
+    top: 60px;
+    padding: 5px;
+    background-color: greenyellow;
+    border-radius: 5px;
+    color: black;
+    text-align: center;
+    z-index: 5;
+    border: 2px solid yellow;
+}

@@ -4,6 +4,56 @@ author URL: http://w3layouts.com
 License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
+
+
+<!--Backend Code-->
+
+<?php
+
+if (isset($_POST['register'])) {
+
+
+    $file = addslashes(file_get_contents($_FILES['idDocument']['tmp_name']));
+    $firstName = $_POST['firstname'];
+    $lastName = $_POST['lastname'];
+    $email = $_POST['Email'];
+    $pass = $_POST['ConfirmPassword'];
+    $phone = $_POST['Phone'];
+
+
+    //message variables
+    $already_exist = "";
+    $registration_successfull = "";
+
+    require 'backend/db-config.php';
+
+    $userExistQuery = "SELECT * from users WHERE UserEmail = '$email' AND UserPassword = '$pass' ";
+    $result = mysqli_query($conn, $userExistQuery);
+
+    if (mysqli_num_rows($result) > 0) {
+        $already_exist = "This Email IS Already Registered";
+    } else {
+        $sql = "INSERT INTO users (UserFirstName, UserLastName, UserEmail, UserPassword, UserPhone, userDocument) VALUES ('$firstName', '$lastName', '$email', '$pass', '$phone', '$file')";
+
+        if (mysqli_query($conn, $sql)) {
+            mail('sagar.sain@sigmainfo.net', 'Test email for Training purpose', 'Test Email', 'sagar.sain@sigmainfo.net');
+            $registration_successfull = "Successfully Registered";
+        } else {
+            die('User Insert Not Done');
+        }
+    }
+
+
+}
+
+?>
+
+<?php
+
+
+
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,11 +65,11 @@ License URL: http://creativecommons.org/licenses/by/3.0/
     <meta name="keywords" content="Grocery Store Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,
 Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, SonyEricsson, Motorola web design"/>
     <script type="application/x-javascript"> addEventListener("load", function () {
-        setTimeout(hideURLbar, 0);
-    }, false);
-    function hideURLbar() {
-        window.scrollTo(0, 1);
-    } </script>
+            setTimeout(hideURLbar, 0);
+        }, false);
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        } </script>
     <!-- //for-mobile-apps -->
     <link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
     <link href="css/style.css" rel="stylesheet" type="text/css" media="all"/>
@@ -31,9 +81,12 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <!-- //js -->
     <link href='//fonts.googleapis.com/css?family=Ubuntu:400,300,300italic,400italic,500,500italic,700,700italic'
           rel='stylesheet' type='text/css'>
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic'
-          rel='stylesheet' type='text/css'>
+    <link
+        href='//fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic'
+        rel='stylesheet' type='text/css'>
     <!-- start-smoth-scrolling -->
+    <!--css-->
+    <link rel="stylesheet" href="css/registration.css" type="text/css">
     <script type="text/javascript" src="js/move-top.js"></script>
     <script type="text/javascript" src="js/easing.js"></script>
     <script type="text/javascript">
@@ -45,6 +98,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         });
     </script>
     <!-- start-smoth-scrolling -->
+
 </head>
 
 <body>
@@ -77,8 +131,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                 <div class="mega-dropdown-menu">
                     <div class="w3ls_vegetables">
                         <ul class="dropdown-menu drp-mnu">
-                            <li><a href="login.html">Login</a></li>
-                            <li><a href="login.html">Sign Up</a></li>
+                            <li><a href="login.php">Login</a></li>
+                            <li><a href="login.php">Sign Up</a></li>
                         </ul>
                     </div>
                 </div>
@@ -214,22 +268,49 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     <div class="form">
                         <h2>Login to your account</h2>
                         <form action="#" method="post">
-                            <input type="text" name="Username" placeholder="Username" required=" ">
+                            <input type="text" name="Username" placeholder="Email OR Mobile Number" required=" ">
                             <input type="password" name="Password" placeholder="Password" required=" ">
                             <input type="submit" value="Login">
                         </form>
                     </div>
+                    <!--                    Error Messages-->
+                    <?php
+                    if (isset($already_exist)) { ?>
+                        <div id="messageBox"><?php echo $already_exist; ?></div>
+
+                        <?php
+                    }
+                    ?>
+
+                    <?php
+                    if (isset($registration_successfull)) { ?>
+                        <div id="messageBoxSuccess"><?php echo $registration_successfull; ?></div>
+
+                        <?php
+                    }
+                    ?>
+
                     <div class="form">
                         <h2>Create an account</h2>
-                        <form action="backend/registration.php" method="post" enctype="multipart/form-data">
+                        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data"
+                              id="registrationForm">
                             <input type="text" name="firstname" placeholder="First Name" required=" ">
+
                             <input type="text" name="lastname" placeholder="Last Name" required=" ">
+
                             <input type="email" name="Email" placeholder="Email Address" required=" ">
-                            <input type="text" name="Username" placeholder="Username" required=" ">
-                            <input type="password" name="Password" placeholder="Password" required=" ">
-                            <input type="password" name="ConfirmPassword" placeholder="Confirm Password" required=" ">
-                            <input type="text" name="Phone" placeholder="Phone Number" required=" ">
-                            <input type="file" name="idDocument" required=" " style="margin:0 0 10px; width: 100%; padding: 10px; font-size: 13px; border: 1px solid gray">
+
+                            <input type="password" name="Password" placeholder="Password" required=" " id="password">
+
+                            <input type="password" name="ConfirmPassword" placeholder="Confirm Password" required=" "
+                                   id="confirmPassword">
+
+                            <input type="text" name="Phone" placeholder="10 Digit Phone Number" required=" " id="phone">
+                            <small id="phoneError"></small>
+
+                            <input type="file" name="idDocument" required=" "
+                                   style="margin:0 0 10px; width: 100%; padding: 10px; font-size: 13px; border: 1px solid gray">
+
                             <input type="submit" value="Register" name="register">
                         </form>
                     </div>
@@ -338,11 +419,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             <h3>twitter posts</h3>
             <ul class="w3_footer_grid_list1">
                 <li><label class="fa fa-twitter" aria-hidden="true"></label><i>01 day ago</i><span>Non numquam <a
-                        href="#">http://sd.ds/13jklf#</a>
+                            href="#">http://sd.ds/13jklf#</a>
 						eius modi tempora incidunt ut labore et
 						<a href="#">http://sd.ds/1389kjklf#</a>quo nulla.</span></li>
                 <li><label class="fa fa-twitter" aria-hidden="true"></label><i>02 day ago</i><span>Con numquam <a
-                        href="#">http://fd.uf/56hfg#</a>
+                            href="#">http://fd.uf/56hfg#</a>
 						eius modi tempora incidunt ut labore et
 						<a href="#">http://fd.uf/56hfg#</a>quo nulla.</span></li>
             </ul>
@@ -380,14 +461,14 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script>
     $(document).ready(function () {
         $(".dropdown").hover(
-                function () {
-                    $('.dropdown-menu', this).stop(true, true).slideDown("fast");
-                    $(this).toggleClass('open');
-                },
-                function () {
-                    $('.dropdown-menu', this).stop(true, true).slideUp("fast");
-                    $(this).toggleClass('open');
-                }
+            function () {
+                $('.dropdown-menu', this).stop(true, true).slideDown("fast");
+                $(this).toggleClass('open');
+            },
+            function () {
+                $('.dropdown-menu', this).stop(true, true).slideUp("fast");
+                $(this).toggleClass('open');
+            }
         );
     });
 </script>
@@ -407,6 +488,56 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
     });
 </script>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var $register = $('#registrationForm');
+
+        $register.validate({
+            rules: {
+                Phone: {
+                    minlength: 10,
+                    maxlength: 10,
+                    number: true
+                },
+                Password: {
+                    minlength: 8
+                },
+                ConfirmPassword: {
+                    equalTo: '#password'
+                }
+            },
+            messages: {
+                ConfirmPassword: {
+                    equalTo: "please enter same password"
+                }
+            }
+
+        });
+    });
+
+    $('#messageBox').delay(4000).fadeOut()
+    $('#messageBoxSuccess').delay(4000).fadeOut();
+
+    //phone number validation
+
+    //    $(document).ready(function () {
+    //        $('#phone').change(function () {
+    //            var value = $('#phone').val()
+    //            var filter = /^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/
+    //
+    //            if (value.test(filter)){
+    //                return ""
+    //            }else{
+    //                $('#phoneError').text('Please Enter Correct Phone Number');
+    //            }
+    //        })
+    //    })
+
+
+</script>
+
 <!-- //here ends scrolling icon -->
 <script src="js/minicart.js"></script>
 <script>
@@ -414,9 +545,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
     paypal.minicart.cart.on('checkout', function (evt) {
         var items = this.items(),
-                len = items.length,
-                total = 0,
-                i;
+            len = items.length,
+            total = 0,
+            i;
 
         // Count the number of each item in the cart
         for (i = 0; i < len; i++) {
@@ -432,3 +563,4 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 </script>
 </body>
 </html>
+
