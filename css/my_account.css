@@ -1,0 +1,58 @@
+
+/*User Account Styling*/
+.user_profile{
+    display: flex;
+    border-top: 5px solid dimgrey;
+    margin: 0px 20px;
+}
+.user_profile .leftBox{
+    width: 50%;
+    padding: 20px 40px;
+}
+.user_profile .rightBox{
+    background-color: #f1f5ea;
+    width: 50%;
+    padding: 20px;
+}
+.user_profile h3{
+    font-weight: 500;
+    padding-bottom: 20px;
+}
+
+.user_profile input[type='text']{
+    background: rgba(255,255,255,0.1);
+    border: none;
+    font-size: 16px;
+    height: auto;
+    margin: 0;
+    outline: 0;
+    padding: 10px;
+    width: 100%;
+    background-color: #e8eeef;
+    color: #8a97a0;
+    box-shadow: 0 1px 0 rgb(0 0 03%) inset;
+    margin-bottom: 20px;
+}
+
+.user_profile input[type='submit']{
+    padding: 15px 25px 15px 25px;
+    color: #FFF;
+    background-color: #84C639;
+    font-size: 18px;
+    text-align: center;
+    font-style: normal;
+    width: 100%;
+    border: 1px solid #3ac162;
+    border-width: 1px 1px 3px;
+    box-shadow: 0 -1px 0;
+}
+
+.rightBox button{
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    background-color: #84C639;
+    margin-right: 10px;
+    border-radius: 2px;
+    margin-top: 20px;
+}
