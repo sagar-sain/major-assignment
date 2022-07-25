@@ -120,19 +120,19 @@ input[type="submit"],#PPMiniCart .minicart-submit,.w3ls_vegetables ul li a,input
 }
 .w3l_header_right{
 	float: left;
-    padding-left: 10em;
+	display: inline-block;
 }
 .w3l_header_right ul li {
     list-style-type: none;
 }
 .w3l_header_right1{
 	float:right;
+
 }
 .w3l_header_right1 h2 a{
-	font-size: .74em;
+	font-size: .50em;
     color: #fff;
     padding: .5em 1.5em;
-    background: #FA1818;
     display: block;
 	text-decoration:none;
 }
@@ -2843,7 +2843,8 @@ input.checkbox:checked:after {
 }
 @media (max-width:1440px){
 	.w3l_header_right {
-		padding-left: 4em;
+		padding-left: 2em;
+		margin-top: 10px;
 	}
 	.w3l_banner_nav_right_banner3 h3, .w3l_banner_nav_right_banner4 h3, .w3l_banner_nav_right_banner5 h3, .w3l_banner_nav_right_banner6 h3, .w3l_banner_nav_right_banner7 h3, .w3l_banner_nav_right_banner8 h3, .w3l_banner_nav_right_banner9 h3, .w3l_banner_nav_right_banner10 h3 {
 		width: 45%;

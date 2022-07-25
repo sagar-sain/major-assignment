@@ -8,7 +8,6 @@ if (!$_SESSION['loginStatus']) {
 }
 ?>
 
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -65,39 +64,82 @@ if (isset($loginSuccess)) { ?>
 }
 ?>
 
+
+
+
 <!-- header -->
 <div class="agileits_header">
     <div class="w3l_offers">
-        <a href="products.html">Today's special Offers !</a>
+        <a href="products.php">Today's special Offers !</a>
     </div>
     <div class="w3l_search">
         <form action="#" method="post">
-            <input type="text" name="Product" value="Search a product..." onfocus="this.value = '';"
-                   onblur="if (this.value == '') {this.value = 'Search a product...';}" required="">
+            <input type="text" name="Product" value="Search a product..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search a product...';}" required="">
             <input type="submit" value=" ">
         </form>
     </div>
     <div class="product_list_header">
-        <form action="backend/logout.php" method="post" class="last">
+        <form action="#" method="post" class="last">
             <fieldset>
-                <input type="submit" name="submit" value="Logout" class="button" />
+                <input type="hidden" name="cmd" value="_cart" />
+                <input type="hidden" name="display" value="1" />
+                <input type="submit" name="submit" value="View your cart" class="button" />
             </fieldset>
         </form>
     </div>
-    <div class="w3l_header_right1">
-        <h2><a href="mail.html">Contact Us</a></h2>
+    <?php
+    session_start();
+    if($_SESSION['loginStatus']){ ?>
+        <div class="w3l_header_right" style="display: inline-block; padding-left: 15px; margin-top: 10px">
+            <button id="logoutBtn">Logout</button>
+        </div>
+        <?php
+    }else{ ?>
+    <div class="w3l_header_right">
+        <ul>
+            <li class="dropdown profile_details_drop">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i><span class="caret"></span></a>
+                <div class="mega-dropdown-menu">
+                    <div class="w3ls_vegetables">
+                        <ul class="dropdown-menu drp-mnu">
+                            <li><a href="login.php">Login</a></li>
+                            <li><a href="login.php">Sign Up</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        </ul>
     </div>
-    <div class="clearfix"></div>
+    <?php
+    }
+    ?>
+
+    <div class="w3l_header_right1">
+        <?php
+        session_start();
+        $name = $_SESSION['userFirstName'];
+        if (isset($name)) { ?>
+            <h2><a><?php echo  "Hi. ".$name; ?></a></h2>
+            <?php
+        }else{ ?>
+        <div class="w3l_header_right1">
+            <h2><a href="mail.php">Contact Us</a></h2>
+        </div>
+        <?php
+        }
+        ?>
+    </div>
+    <div class="clearfix"> </div>
 </div>
 <!-- script-for sticky-nav -->
 <script>
-    $(document).ready(function () {
-        var navoffeset = $(".agileits_header").offset().top;
-        $(window).scroll(function () {
-            var scrollpos = $(window).scrollTop();
-            if (scrollpos >= navoffeset) {
+    $(document).ready(function() {
+        var navoffeset=$(".agileits_header").offset().top;
+        $(window).scroll(function(){
+            var scrollpos=$(window).scrollTop();
+            if(scrollpos >=navoffeset){
                 $(".agileits_header").addClass("fixed");
-            } else {
+            }else{
                 $(".agileits_header").removeClass("fixed");
             }
         });
@@ -108,14 +150,14 @@ if (isset($loginSuccess)) { ?>
 <div class="logo_products">
     <div class="container">
         <div class="w3ls_logo_products_left">
-            <h1><a href="index.html"><span>Grocery</span> Store</a></h1>
+            <h1><a href="index.php"><span>Grocery</span> Store</a></h1>
         </div>
         <div class="w3ls_logo_products_left1">
             <ul class="special_items">
-                <li><a href="events.html">Events</a><i>/</i></li>
-                <li><a href="about.html">About Us</a><i>/</i></li>
-                <li><a href="products.html">Best Deals</a><i>/</i></li>
-                <li><a href="services.html">Services</a></li>
+                <li><a href="/events.php">Events</a><i>/</i></li>
+                <li><a href="about.php">About Us</a><i>/</i></li>
+                <li><a href="products.php">Best Deals</a><i>/</i></li>
+                <li><a href="services.php">Services</a></li>
             </ul>
         </div>
         <div class="w3ls_logo_products_left1">
@@ -133,54 +175,36 @@ if (isset($loginSuccess)) { ?>
 <!--User Profile-->
 <div class="user_profile">
     <div class="leftBox">
-        <h3>Add Address Information</h3>
-        <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" enctype="multipart/form-data" id="registrationForm">
-            <input type="text" name="userAddress" placeholder="Address" required=" " >
+        <h3 id="update_heading">Add Address Information</h3>
+        <form id="address_form">
+            <input type="text" name="userAddress" placeholder="Address" required=" " id="userAddress">
 
-            <input type="text" name="userAddress2" placeholder="Address 2" required=" " >
+            <input type="text" name="userAddress2" placeholder="Address 2" required=" " id="userAddress2">
 
-            <input type="text" name="city" placeholder="City" required=" " class="inputFields">
+            <input type="text" name="city" placeholder="City" required=" " id="city">
 
-            <input type="text" name="userState" placeholder="State" required=" ">
+            <input type="text" name="userState" placeholder="State" required=" " id="userState">
 
-            <input type="text" name="userCountry" placeholder="Country" required=" ">
+            <input type="text" name="userCountry" placeholder="Country" required=" " id="userCountry">
 
-            <input type="text" name="userZip" placeholder="ZIP Code" required=" ">
+            <input type="text" name="userZip" placeholder="ZIP Code" required=" " id="userZip">
 
-            <input type="text" name="userFax" placeholder="Fax" required=" " >
+            <input type="text" name="userFax" placeholder="Fax" required=" " id="userFax">
 
-            <input type="submit" value="Submit Information" name="register">
+            <input type="submit" value="Submit Information" name="submit" id="submit">
+            <input type="submit" value="Update" name="submit" id="update_form">
         </form>
 
     </div>
     <div class="rightBox">
-        <p>Your Address Information</p>
-        <div>
-            <p>Address:</p>
-            <div>Address</div>
-
-            <p>Address 2:</p>
-            <div>Address</div>
-
-            <p>City:</p>
-            <div>Address</div>
-
-            <p>State:</p>
-            <div>Address</div>
-
-            <p>Country:</p>
-            <div>Address</div>
-
-            <p>Zip Code:</p>
-            <div>Address</div>
-
-            <p>Fax:</p>
-            <div>Address</div>
+        <h3>Your Address Information</h3>
+        <div id="addressInfo">
 
         </div>
+        <p id="address_message">Address Information is not there please Add.</p>
         <div>
-            <button>Update Your Address</button>
-            <button>Delete Address Information</button>
+            <button id="updateBtn">Update Your Address</button>
+            <button id="deleteBtn">Delete Address Information</button>
         </div>
 
     </div>
@@ -194,29 +218,29 @@ if (isset($loginSuccess)) { ?>
         <div class="col-md-3 w3_footer_grid">
             <h3>information</h3>
             <ul class="w3_footer_grid_list">
-                <li><a href="events.html">Events</a></li>
-                <li><a href="about.html">About Us</a></li>
-                <li><a href="products.html">Best Deals</a></li>
-                <li><a href="services.html">Services</a></li>
-                <li><a href="short-codes.html">Short Codes</a></li>
+                <li><a href="/events.php">Events</a></li>
+                <li><a href="about.php">About Us</a></li>
+                <li><a href="products.php">Best Deals</a></li>
+                <li><a href="services.php">Services</a></li>
+                <li><a href="short-codes.php">Short Codes</a></li>
             </ul>
         </div>
         <div class="col-md-3 w3_footer_grid">
             <h3>policy info</h3>
             <ul class="w3_footer_grid_list">
-                <li><a href="faqs.html">FAQ</a></li>
-                <li><a href="privacy.html">privacy policy</a></li>
-                <li><a href="privacy.html">terms of use</a></li>
+                <li><a href="faqs.php">FAQ</a></li>
+                <li><a href="privacy.php">privacy policy</a></li>
+                <li><a href="privacy.php">terms of use</a></li>
             </ul>
         </div>
         <div class="col-md-3 w3_footer_grid">
             <h3>what in stores</h3>
             <ul class="w3_footer_grid_list">
-                <li><a href="pet.html">Pet Food</a></li>
+                <li><a href="pet.php">Pet Food</a></li>
                 <li><a href="frozen.html">Frozen Snacks</a></li>
-                <li><a href="kitchen.html">Kitchen</a></li>
-                <li><a href="products.html">Branded Foods</a></li>
-                <li><a href="household.html">Households</a></li>
+                <li><a href="kitchen.php">Kitchen</a></li>
+                <li><a href="products.php">Branded Foods</a></li>
+                <li><a href="household.php">Households</a></li>
             </ul>
         </div>
         <div class="col-md-3 w3_footer_grid">
@@ -262,11 +286,126 @@ if (isset($loginSuccess)) { ?>
 <!-- //footer -->
 
 <!--Footer-->
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!--<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>-->
+<!--<script type="text/javascript">-->
+<!--    $(document).ready(function () {-->
+<!--        var $addressForm = $('#address_form');-->
+<!--        $addressForm.validate({});-->
+<!--    });-->
+<!--</script>-->
+
 <script>
     $('#messageBox').delay(4000).fadeOut()
     $('#messageBoxSuccess').delay(4000).fadeOut();
+
+    $('#logoutBtn').click(function () {
+        window.location.href = 'backend/logout.php'
+    })
 </script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#update_form').hide()
+        $('#updateBtn').hide();
+        $('#deleteBtn').hide();
+
+        function loadAddressDetails(){
+            $.ajax({
+              url:'backend/get_address.php',
+                type: 'GET',
+                success: function (data) {
+                    $('#address_message').hide()
+                    $('#addressInfo').html(data)
+                    $('#updateBtn').show()
+                    $('#deleteBtn').show()
+                }
+            })
+        }
+
+        $('#submit').click(function (event) {
+            event.preventDefault();
+            var postData = $('#address_form');
+
+            $.ajax({
+                    url:"backend/my_account_page.php",
+                    type: "POST",
+                    data: $("#address_form").serialize(),
+                    success: function (data) {
+                        if (data == 1){
+                            $('#messageBox').text('Address Successfully Added').show();
+                            $('#messageBox').delay(4000).fadeOut()
+                            $('#address_message').hide()
+                            loadAddressDetails();
+                            $('#address_form').trigger('reset')
+                        }
+                    } 
+            })
+        })
+
+//        update
+        $('#updateBtn').click(function () {
+            $('#update_heading').text('Update Address')
+            $('#submit').hide()
+            $('#update_form').show()
+
+            $.ajax({
+                url:'backend/update_address.php',
+                type: 'GET',
+                success: function (data) {
+                    var getData = $.parseJSON(data);
+                    $('#userAddress').val(getData.address);
+                    $('#userAddress2').val(getData.address2);
+                    $('#city').val(getData.city);
+                    $('#userState').val(getData.state);
+                    $('#userCountry').val(getData.country);
+                    $('#userZip').val(getData.zip);
+                    $('#userFax').val(getData.fax);
+                }
+            })
+            
+//            sending updated address to server
+            $('#update_form').click(function (event) {
+                event.preventDefault();
+                $.ajax({
+                    url:"backend/updated_address.php",
+                    type: "POST",
+                    data: $("#address_form").serialize(),
+                    success: function (data) {
+                        if (data == 1){
+                            $('#messageBox').text('Address Updated Success').show();
+                            $('#messageBox').delay(4000).fadeOut()
+                            loadAddressDetails();
+                            $('#address_form').trigger('reset')
+                            $('#update_form').hide()
+                            $('#submit').show()
+                            $('#update_heading').text('Add Address Information')
+                        }
+                    }
+                })
+            })
+
+        })
+
+//        Delete Address Information
+        $('#deleteBtn').click(function () {
+            $.ajax({
+                url:"backend/delete_address.php",
+                type: "GET",
+                success: function (data) {
+                    if (data == 1){
+                        $('#messageBox').text('Address Delete Successfully').show();
+                        $('#messageBox').delay(4000).fadeOut()
+                        $('#addressInfo').html('')
+                        $('#address_message').show()
+                        $('#updateBtn').hide()
+                        $('#deleteBtn').hide()
+                    }
+                }
+            })
+        })
+    })
+</script>
+
+
 </body>
 </html>

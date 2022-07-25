@@ -20,13 +20,11 @@ $result = mysqli_query($conn, $loginCheck) or die('Select query not fired in log
 
 if (mysqli_num_rows($result) > 0) {
 
-    echo "inside if";
     $row = mysqli_fetch_assoc($result);
 
     $loginSuccess = "Login Successful";
 
     session_start();
-
     $_SESSION['userFirstName'] = $row['UserFirstName'];
     $_SESSION['userLastName'] = $row['UserLastName'];
     $_SESSION['userEmailAddress'] = $row['UserEmail'];
@@ -36,6 +34,7 @@ if (mysqli_num_rows($result) > 0) {
     if (isset($_SESSION['loginStatus'])) {
         header("Location: /userAccount.php");
     }
+
 } else {
     header("Location: /login.php?msg=$loginError");
 }

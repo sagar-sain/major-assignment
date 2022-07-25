@@ -7,7 +7,7 @@ License URL: http://creativecommons.org/licenses/by/3.0/
 <!DOCTYPE html>
 <html>
 <head>
-<title>Grocery Store a Ecommerce Online Shopping Category Flat Bootstrap Responsive Website Template | Mail Us :: w3layouts</title>
+<title>Grocery Store a Ecommerce Online Shopping Category Flat Bootstrap Responsive Website Template | Services :: w3layouts</title>
 <!-- for-mobile-apps -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -42,25 +42,33 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 	
 <body>
 <!-- header -->
-	<div class="agileits_header">
-		<div class="w3l_offers">
-			<a href="products.html">Today's special Offers !</a>
+<div class="agileits_header">
+	<div class="w3l_offers">
+		<a href="products.php">Today's special Offers !</a>
+	</div>
+	<div class="w3l_search">
+		<form action="#" method="post">
+			<input type="text" name="Product" value="Search a product..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search a product...';}" required="">
+			<input type="submit" value=" ">
+		</form>
+	</div>
+	<div class="product_list_header">
+		<form action="#" method="post" class="last">
+			<fieldset>
+				<input type="hidden" name="cmd" value="_cart" />
+				<input type="hidden" name="display" value="1" />
+				<input type="submit" name="submit" value="View your cart" class="button" />
+			</fieldset>
+		</form>
+	</div>
+	<?php
+	session_start();
+	if($_SESSION['loginStatus']){ ?>
+		<div class="w3l_header_right" style="display: inline-block; padding-left: 15px; margin-top: 10px">
+			<button id="logoutBtn">Logout</button>
 		</div>
-		<div class="w3l_search">
-			<form action="#" method="post">
-				<input type="text" name="Product" value="Search a product..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search a product...';}" required="">
-				<input type="submit" value=" ">
-			</form>
-		</div>
-		<div class="product_list_header">  
-			<form action="#" method="post" class="last">
-                <fieldset>
-                    <input type="hidden" name="cmd" value="_cart" />
-                    <input type="hidden" name="display" value="1" />
-                    <input type="submit" name="submit" value="View your cart" class="button" />
-                </fieldset>
-            </form>
-		</div>
+		<?php
+	}else{ ?>
 		<div class="w3l_header_right">
 			<ul>
 				<li class="dropdown profile_details_drop">
@@ -71,61 +79,78 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								<li><a href="login.php">Login</a></li>
 								<li><a href="login.php">Sign Up</a></li>
 							</ul>
-						</div>                  
-					</div>	
+						</div>
+					</div>
 				</li>
 			</ul>
 		</div>
-		<div class="w3l_header_right1">
-			<h2><a href="mail.html">Contact Us</a></h2>
-		</div>
-		<div class="clearfix"> </div>
+		<?php
+	}
+	?>
+
+	<div class="w3l_header_right1">
+		<?php
+		session_start();
+		$name = $_SESSION['userFirstName'];
+		if (isset($name)) { ?>
+			<h2><a><?php echo  "Hi. ".$name; ?></a></h2>
+			<?php
+		}else{ ?>
+			<div class="w3l_header_right1">
+				<h2><a href="mail.php">Contact Us</a></h2>
+			</div>
+			<?php
+		}
+		?>
 	</div>
+	<div class="clearfix"> </div>
+</div>
 <!-- script-for sticky-nav -->
-	<script>
+<script>
 	$(document).ready(function() {
-		 var navoffeset=$(".agileits_header").offset().top;
-		 $(window).scroll(function(){
-			var scrollpos=$(window).scrollTop(); 
+		var navoffeset=$(".agileits_header").offset().top;
+		$(window).scroll(function(){
+			var scrollpos=$(window).scrollTop();
 			if(scrollpos >=navoffeset){
 				$(".agileits_header").addClass("fixed");
 			}else{
 				$(".agileits_header").removeClass("fixed");
 			}
-		 });
-		 
+		});
+
 	});
-	</script>
+</script>
 <!-- //script-for sticky-nav -->
-	<div class="logo_products">
-		<div class="container">
-			<div class="w3ls_logo_products_left">
-				<h1><a href="index.html"><span>Grocery</span> Store</a></h1>
-			</div>
-			<div class="w3ls_logo_products_left1">
-				<ul class="special_items">
-					<li><a href="events.html">Events</a><i>/</i></li>
-					<li><a href="about.html">About Us</a><i>/</i></li>
-					<li><a href="products.html">Best Deals</a><i>/</i></li>
-					<li><a href="services.html">Services</a></li>
-				</ul>
-			</div>
-			<div class="w3ls_logo_products_left1">
-				<ul class="phone_email">
-					<li><i class="fa fa-phone" aria-hidden="true"></i>(+0123) 234 567</li>
-					<li><i class="fa fa-envelope-o" aria-hidden="true"></i><a href="mailto:store@grocery.com">store@grocery.com</a></li>
-				</ul>
-			</div>
-			<div class="clearfix"> </div>
+<div class="logo_products">
+	<div class="container">
+		<div class="w3ls_logo_products_left">
+			<h1><a href="index.php"><span>Grocery</span> Store</a></h1>
 		</div>
+		<div class="w3ls_logo_products_left1">
+			<ul class="special_items">
+				<li><a href="/events.php">Events</a><i>/</i></li>
+				<li><a href="about.php">About Us</a><i>/</i></li>
+				<li><a href="products.php">Best Deals</a><i>/</i></li>
+				<li><a href="services.php">Services</a></li>
+			</ul>
+		</div>
+		<div class="w3ls_logo_products_left1">
+			<ul class="phone_email">
+				<li><i class="fa fa-phone" aria-hidden="true"></i>(+0123) 234 567</li>
+				<li><i class="fa fa-envelope-o" aria-hidden="true"></i><a href="mailto:store@grocery.com">store@grocery.com</a>
+				</li>
+			</ul>
+		</div>
+		<div class="clearfix"></div>
 	</div>
+</div>
 <!-- //header -->
 <!-- products-breadcrumb -->
 	<div class="products-breadcrumb">
 		<div class="container">
 			<ul>
-				<li><i class="fa fa-home" aria-hidden="true"></i><a href="index.html">Home</a><span>|</span></li>
-				<li>Mail Us</li>
+				<li><i class="fa fa-home" aria-hidden="true"></i><a href="index.php">Home</a><span>|</span></li>
+				<li>Services</li>
 			</ul>
 		</div>
 	</div>
@@ -146,33 +171,33 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			   <!-- Collect the nav links, forms, and other content for toggling -->
 				<div class="collapse navbar-collapse" id="bs-megadropdown-tabs">
 					<ul class="nav navbar-nav nav_1">
-						<li><a href="products.html">Branded Foods</a></li>
-						<li><a href="household.html">Households</a></li>
+						<li><a href="products.php">Branded Foods</a></li>
+						<li><a href="household.php">Households</a></li>
 						<li class="dropdown mega-dropdown active">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Veggies & Fruits<span class="caret"></span></a>				
 							<div class="dropdown-menu mega-dropdown-menu w3ls_vegetables_menu">
 								<div class="w3ls_vegetables">
 									<ul>	
-										<li><a href="vegetables.html">Vegetables</a></li>
-										<li><a href="vegetables.html">Fruits</a></li>
+										<li><a href="vegetables.php">Vegetables</a></li>
+										<li><a href="vegetables.php">Fruits</a></li>
 									</ul>
 								</div>                  
 							</div>				
 						</li>
-						<li><a href="kitchen.html">Kitchen</a></li>
-						<li><a href="short-codes.html">Short Codes</a></li>
+						<li><a href="kitchen.php">Kitchen</a></li>
+						<li><a href="short-codes.php">Short Codes</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Beverages<span class="caret"></span></a>
 							<div class="dropdown-menu mega-dropdown-menu w3ls_vegetables_menu">
 								<div class="w3ls_vegetables">
 									<ul>
-										<li><a href="drinks.html">Soft Drinks</a></li>
-										<li><a href="drinks.html">Juices</a></li>
+										<li><a href="drinks.php">Soft Drinks</a></li>
+										<li><a href="drinks.php">Juices</a></li>
 									</ul>
 								</div>                  
 							</div>	
 						</li>
-						<li><a href="pet.html">Pet Food</a></li>
+						<li><a href="pet.php">Pet Food</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Frozen Foods<span class="caret"></span></a>
 							<div class="dropdown-menu mega-dropdown-menu w3ls_vegetables_menu">
@@ -184,59 +209,130 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 								</div>                  
 							</div>	
 						</li>
-						<li><a href="bread.html">Bread & Bakery</a></li>
+						<li><a href="bread.php">Bread & Bakery</a></li>
 					</ul>
 				 </div><!-- /.navbar-collapse -->
 			</nav>
 		</div>
 		<div class="w3l_banner_nav_right">
-<!-- mail -->
-		<div class="mail">
-			<h3>Mail Us</h3>
-			<div class="agileinfo_mail_grids">
-				<div class="col-md-4 agileinfo_mail_grid_left">
-					<ul>
-						<li><i class="fa fa-home" aria-hidden="true"></i></li>
-						<li>address<span>868 1st Avenue NYC.</span></li>
-					</ul>
-					<ul>
-						<li><i class="fa fa-envelope" aria-hidden="true"></i></li>
-						<li>email<span><a href="mailto:info@example.com">info@example.com</a></span></li>
-					</ul>
-					<ul>
-						<li><i class="fa fa-phone" aria-hidden="true"></i></li>
-						<li>call to us<span>(+123) 233 2362 826</span></li>
-					</ul>
+<!-- services -->
+		<div class="services">
+			<h3>Services</h3>
+			<div class="w3ls_service_grids">
+				<div class="col-md-5 w3ls_service_grid_left">
+					<h4>cum soluta nobis est</h4>
+					<p>Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis 
+						voluptatibus maiores alias consequatur aut perferendis doloribus asperiores 
+						repellat.</p>
 				</div>
-				<div class="col-md-8 agileinfo_mail_grid_right">
-					<form action="#" method="post">
-						<div class="col-md-6 wthree_contact_left_grid">
-							<input type="text" name="Name" value="Name*" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Name*';}" required="">
-							<input type="email" name="Email" value="Email*" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Email*';}" required="">
-						</div>
-						<div class="col-md-6 wthree_contact_left_grid">
-							<input type="text" name="Telephone" value="Telephone*" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Telephone*';}" required="">
-							<input type="text" name="Subject" value="Subject*" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Subject*';}" required="">
-						</div>
-						<div class="clearfix"> </div>
-						<textarea  name="Message" onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Message...';}" required="">Message...</textarea>
-						<input type="submit" value="Submit">
-						<input type="reset" value="Clear">
-					</form>
+				<div class="col-md-7 w3ls_service_grid_right">
+					<div class="col-md-4 w3ls_service_grid_right_1">
+						<img src="images/18.jpg" alt=" " class="img-responsive" />
+					</div>
+					<div class="col-md-4 w3ls_service_grid_right_1">
+						<img src="images/19.jpg" alt=" " class="img-responsive" />
+					</div>
+					<div class="col-md-4 w3ls_service_grid_right_1">
+						<img src="images/20.jpg" alt=" " class="img-responsive" />
+					</div>
+					<div class="clearfix"> </div>
+				</div>
+				<div class="clearfix"> </div>
+			</div>
+			<div class="w3ls_service_grids1">
+				<div class="col-md-6 w3ls_service_grids1_left">
+					<img src="images/4.jpg" alt=" " class="img-responsive" />
+				</div>
+				<div class="col-md-6 w3ls_service_grids1_right">
+					<ul>
+						<li><i class="fa fa-long-arrow-right" aria-hidden="true"></i>et voluptates repudiandae sint et molestiae</li>
+						<li><i class="fa fa-long-arrow-right" aria-hidden="true"></i>rerum necessitatibus saepe eveniet ut</li>
+						<li><i class="fa fa-long-arrow-right" aria-hidden="true"></i>placeat facere possimus, omnis voluptas</li>
+						<li><i class="fa fa-long-arrow-right" aria-hidden="true"></i>Et harum quidem rerum facilis est et expedita</li>
+						<li><i class="fa fa-long-arrow-right" aria-hidden="true"></i>similique sunt in culpa qui officia deserunt</li>
+						<li><i class="fa fa-long-arrow-right" aria-hidden="true"></i>odio dignissimos ducimus qui blanditiis</li>
+					</ul>
+					<a href="single.php">Shop Now</a>
 				</div>
 				<div class="clearfix"> </div>
 			</div>
 		</div>
-<!-- //mail -->
+<!-- //services -->
 		</div>
 		<div class="clearfix"></div>
 	</div>
 <!-- //banner -->
-<!-- map -->
-	<div class="map">
-		<iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d96748.15352429623!2d-74.25419879353115!3d40.731667701988506!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1sshopping+mall+in+New+York%2C+NY%2C+United+States!5e0!3m2!1sen!2sin!4v1467205237951" style="border:0"></iframe>
+<!-- services-bottom -->
+	<div class="services-bottom">
+		<div class="container">
+			<div class="col-md-3 about_counter_left">
+				<i class="glyphicon glyphicon-user" aria-hidden="true"></i>
+				<p class="counter">89,147</p> 
+				<h3>Followers</h3>
+			</div>
+			<div class="col-md-3 about_counter_left">
+				<i class="glyphicon glyphicon-piggy-bank" aria-hidden="true"></i>
+				<p class="counter">54,598</p> 
+				<h3>Savings</h3>
+			</div>
+			<div class="col-md-3 about_counter_left">
+				<i class="glyphicon glyphicon-export" aria-hidden="true"></i>
+				<p class="counter">83,983</p> 
+				<h3>Support</h3>
+			</div>
+			<div class="col-md-3 about_counter_left">
+				<i class="glyphicon glyphicon-bullhorn" aria-hidden="true"></i>
+				<p class="counter">45,894</p> 
+				<h3>Popularity</h3>
+			</div>
+			<div class="clearfix"> </div>
+			<!-- Stats-Number-Scroller-Animation-JavaScript -->
+				<script src="js/waypoints.min.js"></script> 
+				<script src="js/counterup.min.js"></script> 
+				<script>
+					jQuery(document).ready(function( $ ) {
+						$('.counter').counterUp({
+							delay: 10,
+							time: 1000
+						});
+					});
+				</script>
+			<!-- //Stats-Number-Scroller-Animation-JavaScript -->
+
+		</div>
 	</div>
-<!-- //map -->
+<!-- //services-bottom -->
+<!-- newsletter-top-serv-btm -->
+	<div class="newsletter-top-serv-btm">
+		<div class="container">
+			<div class="col-md-4 wthree_news_top_serv_btm_grid">
+				<div class="wthree_news_top_serv_btm_grid_icon">
+					<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+				</div>
+				<h3>Nam libero tempore</h3>
+				<p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus 
+					saepe eveniet ut et voluptates repudiandae sint et.</p>
+			</div>
+			<div class="col-md-4 wthree_news_top_serv_btm_grid">
+				<div class="wthree_news_top_serv_btm_grid_icon">
+					<i class="fa fa-bar-chart" aria-hidden="true"></i>
+				</div>
+				<h3>officiis debitis aut rerum</h3>
+				<p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus 
+					saepe eveniet ut et voluptates repudiandae sint et.</p>
+			</div>
+			<div class="col-md-4 wthree_news_top_serv_btm_grid">
+				<div class="wthree_news_top_serv_btm_grid_icon">
+					<i class="fa fa-truck" aria-hidden="true"></i>
+				</div>
+				<h3>eveniet ut et voluptates</h3>
+				<p>Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus 
+					saepe eveniet ut et voluptates repudiandae sint et.</p>
+			</div>
+			<div class="clearfix"> </div>
+		</div>
+	</div>
+<!-- //newsletter-top-serv-btm -->
 <!-- newsletter -->
 	<div class="newsletter">
 		<div class="container">
@@ -259,29 +355,29 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 			<div class="col-md-3 w3_footer_grid">
 				<h3>information</h3>
 				<ul class="w3_footer_grid_list">
-					<li><a href="events.html">Events</a></li>
-					<li><a href="about.html">About Us</a></li>
-					<li><a href="products.html">Best Deals</a></li>
-					<li><a href="services.html">Services</a></li>
-					<li><a href="short-codes.html">Short Codes</a></li>
+					<li><a href="events.php">Events</a></li>
+					<li><a href="about.php">About Us</a></li>
+					<li><a href="products.php">Best Deals</a></li>
+					<li><a href="services.php">Services</a></li>
+					<li><a href="short-codes.php">Short Codes</a></li>
 				</ul>
 			</div>
 			<div class="col-md-3 w3_footer_grid">
 				<h3>policy info</h3>
 				<ul class="w3_footer_grid_list">
-					<li><a href="faqs.html">FAQ</a></li>
-					<li><a href="privacy.html">privacy policy</a></li>
-					<li><a href="privacy.html">terms of use</a></li>
+					<li><a href="faqs.php">FAQ</a></li>
+					<li><a href="privacy.php">privacy policy</a></li>
+					<li><a href="privacy.php">terms of use</a></li>
 				</ul>
 			</div>
 			<div class="col-md-3 w3_footer_grid">
 				<h3>what in stores</h3>
 				<ul class="w3_footer_grid_list">
-					<li><a href="pet.html">Pet Food</a></li>
+					<li><a href="pet.php">Pet Food</a></li>
 					<li><a href="frozen.html">Frozen Snacks</a></li>
-					<li><a href="kitchen.html">Kitchen</a></li>
-					<li><a href="products.html">Branded Foods</a></li>
-					<li><a href="household.html">Households</a></li>
+					<li><a href="kitchen.php">Kitchen</a></li>
+					<li><a href="products.php">Branded Foods</a></li>
+					<li><a href="household.php">Households</a></li>
 				</ul>
 			</div>
 			<div class="col-md-3 w3_footer_grid">
@@ -342,6 +438,10 @@ $(document).ready(function(){
 <!-- here stars scrolling icon -->
 	<script type="text/javascript">
 		$(document).ready(function() {
+			$('#logoutBtn').click(function () {
+				window.location.href = 'backend/logout.php'
+			})
+			
 			/*
 				var defaults = {
 				containerID: 'toTop', // fading element id
@@ -355,6 +455,7 @@ $(document).ready(function(){
 								
 			});
 	</script>
+<!-- //here ends scrolling icon -->
 <!-- //here ends scrolling icon -->
 <script src="js/minicart.js"></script>
 <script>
@@ -377,6 +478,6 @@ $(document).ready(function(){
 			}
 		});
 
-	</script>s
+	</script>
 </body>
 </html>
