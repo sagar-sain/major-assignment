@@ -47,10 +47,15 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 		<a href="products.php">Today's special Offers !</a>
 	</div>
 	<div class="w3l_search">
-		<form action="#" method="post">
-			<input type="text" name="Product" value="Search a product..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search a product...';}" required="">
-			<input type="submit" value=" ">
+		<form action="/backend/search_product.php" method="get">
+			<input type="text" name="Product" value="Search a product..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search a product...';}" required="" id="search_text">
+			<input type="submit" value="">
 		</form>
+		<div style="position: fixed; width: 23%; top: 44px;">
+			<div class="list-group" id="show-list">
+
+			</div>
+		</div>
 	</div>
 	<div class="product_list_header">
 		<form action="#" method="post" class="last">
@@ -802,6 +807,35 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <!-- Bootstrap Core JavaScript -->
 <script src="js/bootstrap.min.js"></script>
 <script>
+
+	//search suggestion
+	$(document).ready(function () {
+
+		$("#search_text").keyup(function () {
+			let searchText = $(this).val();
+
+			if (searchText != "" && searchText.length > 2) {
+				$.ajax({
+					url: "backend/search_suggestion.php",
+					method: "post",
+					data: {
+						query: searchText,
+					},
+					success: function (response) {
+						$("#show-list").html(response);
+					},
+				});
+			} else {
+				$("#show-list").html("");
+			}
+		});
+
+		$(document).on("click", "a", function () {
+			$("#search_text").val($(this).text());
+			$("#show-list").html("");
+		});
+	});
+
 $(document).ready(function(){
     $(".dropdown").hover(            
         function() {

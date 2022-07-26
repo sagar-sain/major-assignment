@@ -64,8 +64,14 @@ if (isset($loginSuccess)) { ?>
 }
 ?>
 
+<?php
+if (isset($_GET['Product'])) {
+    $keyword = $_GET['Product'];
 
-
+} else {
+    $keyword = '';
+}
+?>
 
 <!-- header -->
 <div class="agileits_header">
@@ -73,44 +79,52 @@ if (isset($loginSuccess)) { ?>
         <a href="products.php">Today's special Offers !</a>
     </div>
     <div class="w3l_search">
-        <form action="#" method="post">
-            <input type="text" name="Product" value="Search a product..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search a product...';}" required="">
-            <input type="submit" value=" ">
+        <form action="/backend/search_product.php" method="get">
+            <input type="text" name="Product" value="Search a product..." onfocus="this.value = '';"
+                   onblur="if (this.value == '') {this.value = 'Search a product...';}" required="" id="search_text">
+            <input type="submit" value="">
         </form>
+        <div style="position: fixed; width: 23%; top: 44px;">
+            <div class="list-group" id="show-list">
+
+            </div>
+        </div>
     </div>
     <div class="product_list_header">
         <form action="#" method="post" class="last">
             <fieldset>
-                <input type="hidden" name="cmd" value="_cart" />
-                <input type="hidden" name="display" value="1" />
-                <input type="submit" name="submit" value="View your cart" class="button" />
+                <input type="hidden" name="cmd" value="_cart"/>
+                <input type="hidden" name="display" value="1"/>
+                <input type="submit" name="submit" value="View your cart" class="button"/>
             </fieldset>
         </form>
     </div>
     <?php
     session_start();
-    if($_SESSION['loginStatus']){ ?>
+    if ($_SESSION['loginStatus']) { ?>
         <div class="w3l_header_right" style="display: inline-block; padding-left: 15px; margin-top: 10px">
-            <button id="logoutBtn">Logout</button>
+            <button id="logoutBtn" class="logoutBtn">Logout</button>
         </div>
         <?php
-    }else{ ?>
-    <div class="w3l_header_right">
-        <ul>
-            <li class="dropdown profile_details_drop">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i><span class="caret"></span></a>
-                <div class="mega-dropdown-menu">
-                    <div class="w3ls_vegetables">
-                        <ul class="dropdown-menu drp-mnu">
-                            <li><a href="login.php">Login</a></li>
-                            <li><a href="login.php">Sign Up</a></li>
-                        </ul>
+    } else { ?>
+        <div class="w3l_header_right">
+            <ul>
+                <li class="dropdown profile_details_drop">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"
+                                                                                  aria-hidden="true"></i><span
+                            class="caret"></span></a>
+                    <div class="mega-dropdown-menu">
+                        <div class="w3ls_vegetables">
+                            <ul class="dropdown-menu drp-mnu">
+                                <li><a href="login.php">Login</a></li>
+                                <li><a href="login.php">Sign Up</a></li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </li>
-        </ul>
-    </div>
-    <?php
+                </li>
+            </ul>
+        </div>
+        <?php
     }
     ?>
 
@@ -119,27 +133,27 @@ if (isset($loginSuccess)) { ?>
         session_start();
         $name = $_SESSION['userFirstName'];
         if (isset($name)) { ?>
-            <h2><a><?php echo  "Hi. ".$name; ?></a></h2>
+            <h2><a><?php echo "Hi. " . $name; ?></a></h2>
             <?php
-        }else{ ?>
-        <div class="w3l_header_right1">
-            <h2><a href="mail.php">Contact Us</a></h2>
-        </div>
-        <?php
+        } else { ?>
+            <div class="w3l_header_right1">
+                <h2><a href="mail.php">Contact Us</a></h2>
+            </div>
+            <?php
         }
         ?>
     </div>
-    <div class="clearfix"> </div>
+    <div class="clearfix"></div>
 </div>
 <!-- script-for sticky-nav -->
 <script>
-    $(document).ready(function() {
-        var navoffeset=$(".agileits_header").offset().top;
-        $(window).scroll(function(){
-            var scrollpos=$(window).scrollTop();
-            if(scrollpos >=navoffeset){
+    $(document).ready(function () {
+        var navoffeset = $(".agileits_header").offset().top;
+        $(window).scroll(function () {
+            var scrollpos = $(window).scrollTop();
+            if (scrollpos >= navoffeset) {
                 $(".agileits_header").addClass("fixed");
-            }else{
+            } else {
                 $(".agileits_header").removeClass("fixed");
             }
         });
@@ -302,6 +316,34 @@ if (isset($loginSuccess)) { ?>
     $('#logoutBtn').click(function () {
         window.location.href = 'backend/logout.php'
     })
+
+    //search suggestion
+    $(document).ready(function () {
+
+        $("#search_text").keyup(function () {
+            let searchText = $(this).val();
+
+            if (searchText != "" && searchText.length > 2) {
+                $.ajax({
+                    url: "backend/search_suggestion.php",
+                    method: "post",
+                    data: {
+                        query: searchText,
+                    },
+                    success: function (response) {
+                        $("#show-list").html(response);
+                    },
+                });
+            } else {
+                $("#show-list").html("");
+            }
+        });
+
+        $(document).on("click", "a", function () {
+            $("#search_text").val($(this).text());
+            $("#show-list").html("");
+        });
+    });
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -309,9 +351,9 @@ if (isset($loginSuccess)) { ?>
         $('#updateBtn').hide();
         $('#deleteBtn').hide();
 
-        function loadAddressDetails(){
+        function loadAddressDetails() {
             $.ajax({
-              url:'backend/get_address.php',
+                url: 'backend/get_address.php',
                 type: 'GET',
                 success: function (data) {
                     $('#address_message').hide()
@@ -327,18 +369,18 @@ if (isset($loginSuccess)) { ?>
             var postData = $('#address_form');
 
             $.ajax({
-                    url:"backend/my_account_page.php",
-                    type: "POST",
-                    data: $("#address_form").serialize(),
-                    success: function (data) {
-                        if (data == 1){
-                            $('#messageBox').text('Address Successfully Added').show();
-                            $('#messageBox').delay(4000).fadeOut()
-                            $('#address_message').hide()
-                            loadAddressDetails();
-                            $('#address_form').trigger('reset')
-                        }
-                    } 
+                url: "backend/my_account_page.php",
+                type: "POST",
+                data: $("#address_form").serialize(),
+                success: function (data) {
+                    if (data == 1) {
+                        $('#messageBox').text('Address Successfully Added').show();
+                        $('#messageBox').delay(4000).fadeOut()
+                        $('#address_message').hide()
+                        loadAddressDetails();
+                        $('#address_form').trigger('reset')
+                    }
+                }
             })
         })
 
@@ -349,7 +391,7 @@ if (isset($loginSuccess)) { ?>
             $('#update_form').show()
 
             $.ajax({
-                url:'backend/update_address.php',
+                url: 'backend/update_address.php',
                 type: 'GET',
                 success: function (data) {
                     var getData = $.parseJSON(data);
@@ -362,16 +404,16 @@ if (isset($loginSuccess)) { ?>
                     $('#userFax').val(getData.fax);
                 }
             })
-            
+
 //            sending updated address to server
             $('#update_form').click(function (event) {
                 event.preventDefault();
                 $.ajax({
-                    url:"backend/updated_address.php",
+                    url: "backend/updated_address.php",
                     type: "POST",
                     data: $("#address_form").serialize(),
                     success: function (data) {
-                        if (data == 1){
+                        if (data == 1) {
                             $('#messageBox').text('Address Updated Success').show();
                             $('#messageBox').delay(4000).fadeOut()
                             loadAddressDetails();
@@ -389,10 +431,10 @@ if (isset($loginSuccess)) { ?>
 //        Delete Address Information
         $('#deleteBtn').click(function () {
             $.ajax({
-                url:"backend/delete_address.php",
+                url: "backend/delete_address.php",
                 type: "GET",
                 success: function (data) {
-                    if (data == 1){
+                    if (data == 1) {
                         $('#messageBox').text('Address Delete Successfully').show();
                         $('#messageBox').delay(4000).fadeOut()
                         $('#addressInfo').html('')
