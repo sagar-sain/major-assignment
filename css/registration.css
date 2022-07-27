@@ -28,6 +28,18 @@ label.error{
     text-align: center;
     z-index: 5;
 }
+
+#messageBox1{
+    width: 30%;
+    position: fixed;
+    right: 10px;
+    top: 60px;
+    padding: 10px 0px;
+    background-color: greenyellow;
+    color: black;
+    text-align: center;
+    z-index: 5;
+}
 #messageBoxSuccess{
     width: 30%;
     position: fixed;
@@ -40,3 +52,15 @@ label.error{
     z-index: 5;
 }
 
+
+.alertMSG{
+    width: 30%;
+    position: fixed;
+    right: 10px;
+    top: 60px;
+    padding: 10px 0px;
+    background-color: greenyellow;
+    color: black;
+    text-align: center;
+    z-index: 5;
+}

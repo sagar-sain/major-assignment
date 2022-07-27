@@ -57,7 +57,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     </div>
     <div class="w3l_search">
         <form action="/backend/search_product.php" method="get">
-            <input type="text" name="Product" value="Search a product..." onfocus="this.value = '';" onblur="if (this.value == '') {this.value = 'Search a product...';}" required="" id="search_text">
+            <input type="text" name="Product" value="Search a product..." onfocus="this.value = '';"
+                   onblur="if (this.value == '') {this.value = 'Search a product...';}" required="" id="search_text">
             <input type="submit" value="">
         </form>
         <div style="position: fixed; width: 23%; top: 44px;">
@@ -70,24 +71,26 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     <div class="product_list_header">
         <form action="#" method="post" class="last">
             <fieldset>
-                <input type="hidden" name="cmd" value="_cart" />
-                <input type="hidden" name="display" value="1" />
-                <input type="submit" name="submit" value="View your cart" class="button" />
+                <input type="hidden" name="cmd" value="_cart"/>
+                <input type="hidden" name="display" value="1"/>
+                <input type="submit" name="submit" value="View your cart" class="button"/>
             </fieldset>
         </form>
     </div>
     <?php
     session_start();
-    if($_SESSION['loginStatus']){ ?>
+    if ($_SESSION['loginStatus']) { ?>
         <div class="w3l_header_right" style="display: inline-block; padding-left: 15px; margin-top: 10px">
             <button id="logoutBtn" class="logoutBtn">Logout</button>
         </div>
         <?php
-    }else{ ?>
+    } else { ?>
         <div class="w3l_header_right">
             <ul>
                 <li class="dropdown profile_details_drop">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i><span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"
+                                                                                  aria-hidden="true"></i><span
+                            class="caret"></span></a>
                     <div class="mega-dropdown-menu">
                         <div class="w3ls_vegetables">
                             <ul class="dropdown-menu drp-mnu">
@@ -108,9 +111,9 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         session_start();
         $name = $_SESSION['userFirstName'];
         if (isset($name)) { ?>
-            <h2><a><?php echo  "Hi. ".$name; ?></a></h2>
+            <h2><a><?php echo "Hi. " . $name; ?></a></h2>
             <?php
-        }else{ ?>
+        } else { ?>
             <div class="w3l_header_right1">
                 <h2><a href="mail.php">Contact Us</a></h2>
             </div>
@@ -118,17 +121,17 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
         }
         ?>
     </div>
-    <div class="clearfix"> </div>
+    <div class="clearfix"></div>
 </div>
 <!-- script-for sticky-nav -->
 <script>
-    $(document).ready(function() {
-        var navoffeset=$(".agileits_header").offset().top;
-        $(window).scroll(function(){
-            var scrollpos=$(window).scrollTop();
-            if(scrollpos >=navoffeset){
+    $(document).ready(function () {
+        var navoffeset = $(".agileits_header").offset().top;
+        $(window).scroll(function () {
+            var scrollpos = $(window).scrollTop();
+            if (scrollpos >= navoffeset) {
                 $(".agileits_header").addClass("fixed");
-            }else{
+            } else {
                 $(".agileits_header").removeClass("fixed");
             }
         });
@@ -167,67 +170,79 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
     <?php
 
-        $keyword = $_GET['Product'];
+    $keyword = $_GET['Product'];
 
-        require 'db-config.php';
-        $limit = 2;
+    require 'db-config.php';
+    $limit = 2;
 
-        if (isset($_GET['page'])){
-            $page = $_GET['page'];
-        }else{
-            $page = 1;
+    if (isset($_GET['page'])) {
+        $page = $_GET['page'];
+    } else {
+        $page = 1;
+    }
+
+    $offset = ($page - 1) * $limit;
+
+    $sql = "SELECT * FROM products WHERE ProductName LIKE '%$keyword%' OR ProductSKU LIKE '%$keyword%' OR ProductLongDesc LIKE '%$keyword%' limit $offset,$limit";
+
+    $result = mysqli_query($conn, $sql);
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            ?>
+            <div class="product">
+                <img title=" " alt=" "
+                     src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['ProductImage']); ?>"
+                <h3 style="margin-top: 10px"><?php echo $row['ProductName']; ?></h3>
+                <h4><?php echo $row['ProductPrice']; ?></h4>
+                <p><?php echo $row['ProductShortDesc']; ?></p>
+                <p><?php echo $row['ProductLongDesc']; ?></p>
+                <button>Get Details</button>
+            </div>
+            <?php
         }
+        ?>
 
-        $offset = ($page - 1) * $limit;
+        <?php
+    } else {
+        echo "<h4 style='padding: 40px 0px; color: dimgrey'>No Record Found for This Search...</h4>";
+    }
+    ?>
+</div>
 
-        $sql = "SELECT * FROM products WHERE ProductName LIKE '%$keyword%' OR ProductSKU LIKE '%$keyword%' OR ProductLongDesc LIKE '%$keyword%' limit $offset,$limit";
-
-        $result = mysqli_query($conn, $sql);
-
-        if (mysqli_num_rows($result) > 0){
-            while ($row = mysqli_fetch_assoc($result)){
-                ?>
-                <div class="product">
-                    <img title=" " alt=" " src="data:image/jpg;charset=utf8;base64,<?php echo base64_encode($row['ProductImage']); ?>"
-                    <h3 style="margin-top: 10px"><?php echo $row['ProductName']; ?></h3>
-                    <h4><?php echo $row['ProductPrice']; ?></h4>
-                    <p><?php echo $row['ProductShortDesc']; ?></p>
-                    <p><?php echo $row['ProductLongDesc']; ?></p>
-                    <button>Get Details</button>
-                </div>
+<?php
+$sql = "SELECT * FROM products WHERE ProductName LIKE '%$keyword%' OR ProductSKU LIKE '%$keyword%' OR ProductLongDesc LIKE '%$keyword%'";
+$result = $conn->query($sql);
+if ($result) {
+    $msg = "try again";
+}
+$total = mysqli_num_rows($result);
+$pages = ceil($total / $limit);
+if ($total > $limit) {
+    ?>
+    <div class="pagination_box">
+        <ul class="pagination pt-2 pd-5">
+            <?php
+            if ($page > 1) { ?>
+                <li><a href="search_product.php?Product=<?= $keyword ?>&page=<?= ($page - 1) ?>">Previous</a></li>
                 <?php
             }
             ?>
+            <?php
+            for ($i = 1; $i <= $pages; $i++) { ?>
+                <li class="page-item <?= ($i == $page) ? $active = 'active' : ''; ?>">
+                    <a href="search_product.php?Product=<?= $keyword ?>&page=<?= $i ?>" class="page-link">
+                        <?= $i ?>
+                    </a>
+                </li>
+            <?php }
 
-        <?php
-        }else{
-            echo "<h4 style='padding: 40px 0px; color: dimgrey'>No Record Found for This Search...</h4>";
-        }
-        ?>
-    </div>
-
-<?php
-$sql="SELECT * FROM products WHERE ProductName LIKE '%$keyword%' OR ProductSKU LIKE '%$keyword%' OR ProductLongDesc LIKE '%$keyword%'";
-$result=$conn->query($sql);
-if($result){
-    $msg="try again";
-}
-$total = mysqli_num_rows($result);
-$pages = ceil ($total / $limit);
-if($total>$limit){
-
-    ?>
-    <div class="pagination_box">
-    <ul class="pagination pt-2 pd-5">
-        <?php
-        for($i=1;$i<=$pages;$i++){ ?>
-            <li class="page-item <?= ($i==$page)?$active='active':'';?>">
-                <a href="search_product.php?Product=<?=$keyword?>&page=<?=$i?>" class="page-link">
-                    <?= $i ?>
-                </a>
-            </li>
-        <?php } ?>
-    </ul>
+            if ($total > $page) { ?>
+            <li><a href="search_product.php?Product=<?= $keyword ?>&page=<?= ($page + 1) ?>">Next</a></li>
+            <?php
+            }
+            ?>
+        </ul>
     </div>
 <?php } ?>
 

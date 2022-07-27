@@ -5,10 +5,53 @@ License: Creative Commons Attribution 3.0 Unported
 License URL: http://creativecommons.org/licenses/by/3.0/
 -->
 
-
 <!--Backend Code-->
 
 <?php
+ini_set('display_errors', 1); ini_set('display_startup_errors', 1); error_reporting(E_ALL);
+
+require ('phpmailer/Exception.php');
+require ('phpmailer/PHPMailer.php');
+require ('phpmailer/SMTP.php');
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+function emailSend($demomail, $name){
+    //Create an instance; passing `true` enables exceptions
+    $mail = new PHPMailer(true);
+
+    try {
+        //Server settings
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'pbgp123456@gmail.com';                     //SMTP username
+        $mail->Password   = 'cerkaarewkaofidf';                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = 465;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
+
+        //Recipients
+        $mail->setfrom('sagar.sain@sigmainfo.net', 'Mailer');
+        $mail->addaddress($demomail, $name);     //Add a recipient
+
+
+
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'Registration Successfull';
+        $mail->Body    = 'Thanks for registering on <b>Grocery.com</b>';
+        $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+        $mail->send();
+        session_start();
+        $_SESSION['emailSent'] = 'Email has been sent';
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    }
+}
+
 
 if (isset($_POST['register'])) {
 
@@ -33,16 +76,15 @@ if (isset($_POST['register'])) {
     if (mysqli_num_rows($result) > 0) {
         $already_exist = "This Email IS Already Registered";
     } else {
-        $sql = "INSERT INTO users (UserFirstName, UserLastName, UserEmail, UserPassword, UserPhone, userDocument) VALUES ('$firstName', '$lastName', '$email', '$pass', '$phone', '$file')";
 
+        $sql = "INSERT INTO users (UserFirstName, UserLastName, UserEmail, UserPassword, UserPhone, userDocument) VALUES ('$firstName', '$lastName', '$email', '$pass', '$phone', '$file')";
         if (mysqli_query($conn, $sql)) {
-            mail('sagar.sain@sigmainfo.net', 'Test email for Training purpose', 'Test Email', 'sagar.sain@sigmainfo.net');
             $registration_successfull = "Successfully Registered";
+            emailSend($email, $firstName);
         } else {
             die('User Insert Not Done');
         }
     }
-
 
 }
 
@@ -288,20 +330,32 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
                     ?>
 
                     <?php
-                    $logout_msg = $_GET['logout'];
 
-                    if (isset($logout_msg)) { ?>
-                        <div id="messageBoxSuccess"><?php echo $logout_msg; ?></div>
+                    if (isset($_GET['logout'])) { ?>
+                        <div id="messageBoxSuccess2" style="width: 30%; position: fixed; right: 10px; top: 60px; padding: 10px 0px; background-color: greenyellow; color: black; text-align: center; z-index: 5;"><?php echo $_GET['logout']; ?></div>
 
                         <?php
                     }
                     ?>
 
-                    <?php
-                    $loginError = $_GET['msg'];
 
-                    if (isset($loginError)) { ?>
-                        <div id="messageBoxSuccess"><?php echo $loginError; ?></div>
+                    <?php
+
+                    if (isset($_SESSION['emailSent'])) { ?>
+                        <div id="messageBoxSuccess1" class="alertMSG"><?php echo $_SESSION['emailSent']; ?></div>
+
+                        <?php
+                        unset($_SESSION['emailSent']);
+                    }
+
+                    ?>
+
+
+
+                    <?php
+
+                    if (isset($_GET['msg'])) { ?>
+                        <div id="messageBoxSuccess"><?php echo $_GET['msg']; ?></div>
 
                         <?php
                     }
@@ -538,6 +592,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
     $('#messageBox').delay(4000).fadeOut()
     $('#messageBoxSuccess').delay(4000).fadeOut();
+    $('#messageBoxSuccess1').delay(4000).fadeOut();
+    $('#messageBoxSuccess2').delay(4000).fadeOut(function () {
+        window.location.href = '/';
+    })
+
 
     //phone number validation
 

@@ -3,8 +3,6 @@
 session_start();
 if (!$_SESSION['loginStatus']) {
     header('Location: /login.php');
-} else {
-    $loginSuccess = "You have successfully Logged In";
 }
 ?>
 
@@ -57,10 +55,21 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 
 <?php
 
-if (isset($loginSuccess)) { ?>
-    <div id="messageBox"><?php echo $loginSuccess; ?></div>
+if (isset($_SESSION['loginSuccess'])) { ?>
+    <div id="messageBox"><?php echo $_SESSION['loginSuccess']; ?></div>
 
     <?php
+    unset($_SESSION['loginSuccess']);
+}
+?>
+
+<?php
+
+if (isset($_SESSION['newsletter_subscription'])) { ?>
+    <div id="messageBox1" style="width: 30%; position: fixed; right: 10px; top: 60px; padding: 10px 0px; background-color: greenyellow; color: black; text-align: center; z-index: 5;"><?php echo $_SESSION['newsletter_subscription']; ?></div>
+
+    <?php
+    unset($_SESSION['newsletter_subscription']);
 }
 ?>
 
@@ -164,7 +173,7 @@ if (isset($_GET['Product'])) {
 <div class="logo_products">
     <div class="container">
         <div class="w3ls_logo_products_left">
-            <h1><a href="index.php"><span>Grocery</span> Store</a></h1>
+            <h1><a href="/index.php"><span>Grocery</span> Store</a></h1>
         </div>
         <div class="w3ls_logo_products_left1">
             <ul class="special_items">
@@ -225,6 +234,24 @@ if (isset($_GET['Product'])) {
 </div>
 
 <!--User Profile-->
+<!-- newsletter -->
+<div class="newsletter">
+    <div class="container">
+        <div class="w3agile_newsletter_left">
+            <h3>sign up for our newsletter</h3>
+        </div>
+        <div class="w3agile_newsletter_right">
+            <form action="" method="post" id="newsletter_form">
+                <input type="email" name="Email" value="Email" onfocus="this.value = '';"
+                       onblur="if (this.value == '') {this.value = 'Email';}"
+                       required="">
+                <input type="submit" value="subscribe now" id="newsletter_submit">
+            </form>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+<!-- //newsletter -->
 
 <!-- footer -->
 <div class="footer">
@@ -300,6 +327,13 @@ if (isset($_GET['Product'])) {
 <!-- //footer -->
 
 <!--Footer-->
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var newsletterForm = $('#newsletter_form');
+        newsletterForm.validate({});
+    });
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!--<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>-->
 <!--<script type="text/javascript">-->
@@ -312,6 +346,7 @@ if (isset($_GET['Product'])) {
 <script>
     $('#messageBox').delay(4000).fadeOut()
     $('#messageBoxSuccess').delay(4000).fadeOut();
+    $('#messageBox1').delay(4000).fadeOut();
 
     $('#logoutBtn').click(function () {
         window.location.href = 'backend/logout.php'
@@ -319,7 +354,6 @@ if (isset($_GET['Product'])) {
 
     //search suggestion
     $(document).ready(function () {
-
         $("#search_text").keyup(function () {
             let searchText = $(this).val();
 
@@ -344,6 +378,7 @@ if (isset($_GET['Product'])) {
             $("#show-list").html("");
         });
     });
+
 </script>
 <script type="text/javascript">
     $(document).ready(function () {
@@ -445,9 +480,23 @@ if (isset($_GET['Product'])) {
                 }
             })
         })
+        //newsletter
+        $('#newsletter_submit').click(function (event) {
+            event.preventDefault();
+            $.ajax({
+                url: "backend/newsletter.php",
+                type: "POST",
+                data: $("#newsletter_form").serialize(),
+                success: function (data) {
+                    if (data == 1){
+                        $('#messageBox1').show()
+                    }
+                }
+            })
+        })
+
     })
 </script>
-
 
 </body>
 </html>

@@ -75,24 +75,49 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
             </fieldset>
         </form>
     </div>
-    <div class="w3l_header_right">
-        <ul>
-            <li class="dropdown profile_details_drop">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user" aria-hidden="true"></i><span
-                        class="caret"></span></a>
-                <div class="mega-dropdown-menu">
-                    <div class="w3ls_vegetables">
-                        <ul class="dropdown-menu drp-mnu">
-                            <li><a href="/login.php">Login</a></li>
-                            <li><a href="/login.php">Sign Up</a></li>
-                        </ul>
+    <?php
+    session_start();
+    if ($_SESSION['loginStatus']) { ?>
+        <div class="w3l_header_right" style="display: inline-block; padding-left: 15px; margin-top: 10px">
+            <button id="logoutBtn" class="logoutBtn">Logout</button>
+        </div>
+        <?php
+    } else { ?>
+        <div class="w3l_header_right">
+            <ul>
+                <li class="dropdown profile_details_drop">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"
+                                                                                  aria-hidden="true"></i><span
+                            class="caret"></span></a>
+                    <div class="mega-dropdown-menu">
+                        <div class="w3ls_vegetables">
+                            <ul class="dropdown-menu drp-mnu">
+                                <li><a href="login.php">Login</a></li>
+                                <li><a href="login.php">Sign Up</a></li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </li>
-        </ul>
-    </div>
+                </li>
+            </ul>
+        </div>
+        <?php
+    }
+    ?>
+
     <div class="w3l_header_right1">
-        <h2><a href="mail.php">Contact Us</a></h2>
+        <?php
+        session_start();
+        $name = $_SESSION['userFirstName'];
+        if (isset($name)) { ?>
+            <h2><a><?php echo "Hi. " . $name; ?></a></h2>
+            <?php
+        } else { ?>
+            <div class="w3l_header_right1">
+                <h2><a href="mail.php">Contact Us</a></h2>
+            </div>
+            <?php
+        }
+        ?>
     </div>
     <div class="clearfix"></div>
 </div>
@@ -115,11 +140,11 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <div class="logo_products">
     <div class="container">
         <div class="w3ls_logo_products_left">
-            <h1><a href="index.php"><span>Grocery</span> Store</a></h1>
+            <h1><a href="/index.php"><span>Grocery</span> Store</a></h1>
         </div>
         <div class="w3ls_logo_products_left1">
             <ul class="special_items">
-                <li><a href="events.php">Events</a><i>/</i></li>
+                <li><a href="/events.php">Events</a><i>/</i></li>
                 <li><a href="about.php">About Us</a><i>/</i></li>
                 <li><a href="products.php">Best Deals</a><i>/</i></li>
                 <li><a href="services.php">Services</a></li>

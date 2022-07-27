@@ -30,6 +30,7 @@ if (mysqli_num_rows($result) > 0) {
     $_SESSION['userEmailAddress'] = $row['UserEmail'];
     $_SESSION['user_id'] = $row['UserID'];
     $_SESSION['loginStatus'] = true;
+    $_SESSION['loginSuccess'] = 'You are logged In';
 
     if (isset($_SESSION['loginStatus'])) {
         header("Location: /userAccount.php");
